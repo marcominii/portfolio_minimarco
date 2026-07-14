@@ -206,7 +206,7 @@ body {
     display: grid;
     grid-template-columns: 1.4fr 1fr; 
     gap: 3.5rem 4rem;
-    align-items: stretch; /* Obliga a que la columna derecha e izquierda tengan idéntica altura */
+    align-items: stretch;
 }
 
 /* --- COLUMNA IZQUIERDA --- */
@@ -243,7 +243,7 @@ body {
     display: flex;
     flex-direction: column;
     gap: 1rem;
-    margin-top: auto; /* Empuja la navegación al fondo si el contenido izquierdo es más corto */
+    margin-top: auto;
 }
 
 .nav-section-tag {
@@ -254,6 +254,7 @@ body {
     letter-spacing: 1px;
 }
 
+/* BOTONES DE VIEJA NAVEGACIÓN (Mantenidos para el Modal) */
 .category-buttons {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -290,6 +291,69 @@ body {
     color: #000;
 }
 
+/* ==========================================================================
+   3B. NUEVOS BOTONES DE FILTRO MULTI-SELECCIÓN (HERO)
+   ========================================================================== */
+
+.filter-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+
+.filter-btn {
+    background: #15151b;
+    color: var(--text-main);
+    border: 1px solid var(--border-color);
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.2rem;
+    border-radius: 4px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 auto; 
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+/* Pseudo-elemento para el rombo animado (Oculto por defecto) */
+.filter-btn::before {
+    content: "♦";
+    display: inline-block;
+    color: inherit;
+    width: 0;
+    opacity: 0;
+    transform: translateX(-10px);
+    transition: opacity 0.3s ease, transform 0.3s ease, width 0.3s ease, margin-right 0.3s ease;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.filter-btn:hover {
+    background: #1c1c24; 
+    border-color: #3f404d;
+}
+
+/* Estado Activo */
+.filter-btn.active {
+    background: var(--accent-orange-ui);
+    color: #000;
+    border-color: var(--accent-orange-ui);
+}
+
+/* Animación del rombo al estar activo */
+.filter-btn.active::before {
+    opacity: 1;
+    transform: translateX(0);
+    width: 14px;
+    margin-right: 6px;
+}
+
+
 /* --- COLUMNA DERECHA (PIPELINE VERTICAL) --- */
 .hero-right-column {
     display: flex;
@@ -302,7 +366,7 @@ body {
     border-radius: 8px;
     padding: 1.75rem;
     box-shadow: 0 15px 40px rgba(0,0,0,0.4);
-    height: 100%; /* Toma el 100% de la altura estirada por el contenedor */
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -321,7 +385,7 @@ body {
     flex-direction: column;
     gap: 1.75rem;
     flex-grow: 1;
-    justify-content: space-evenly; /* Distribuye proporcionalmente los bloques en el alto total */
+    justify-content: space-evenly;
 }
 
 .sidebar-group-block {
@@ -375,10 +439,10 @@ body {
 
 /* Redes Sociales y Contacto - CENTRADO TOTAL */
 .social-contact-bar {
-    grid-column: 1 / -1; /* Rompe el esquema de dos columnas para tomar el ancho entero de la pantalla */
+    grid-column: 1 / -1;
     display: flex;
     gap: 1.5rem;
-    justify-content: center; /* Centrado absoluto horizontal respecto al viewport */
+    justify-content: center;
     align-items: center;
     width: 100%;
     margin-top: 5rem;
@@ -514,6 +578,110 @@ body {
 }
 
 /* ==========================================================================
+   5B. SECCIÓN VFX — TARJETA HORIZONTAL CON LAZY LOAD
+   ========================================================================== */
+
+.project-card-horizontal {
+    flex-direction: row !important;
+    align-items: stretch;
+    gap: 1.5rem;
+}
+
+.horizontal-video-side {
+    flex: 0 0 38%;
+    min-width: 0;
+}
+
+.horizontal-info-side {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    justify-content: center;
+}
+
+.card-title-mono {
+    font-family: 'Fira Code', monospace;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.project-date {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.8rem;
+    color: var(--accent-blue);
+}
+
+.video-container-vertical {
+    position: relative;
+    width: 100%;
+    padding-bottom: 177.77%;  /* Relación de aspecto 9:16 */
+    background-color: #0c0c0e;
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid var(--border-color);
+}
+
+.video-poster {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    cursor: pointer;
+    z-index: 2;
+    transition: opacity 0.4s ease;
+}
+
+.play-button {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+    background: rgba(0, 0, 0, 0.55);
+    border: none;
+    border-radius: 50%;
+    width: 64px;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: #ffffff;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(4px);
+}
+
+.play-button:hover {
+    background: var(--accent-orange-ui);
+    color: #000;
+    transform: translate(-50%, -50%) scale(1.1);
+    box-shadow: 0 0 20px rgba(243, 156, 18, 0.5);
+}
+
+.lazy-iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    border: none;
+}
+
+.video-container-vertical.video-active .video-poster,
+.video-container-vertical.video-active .play-button {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.video-container-vertical.video-active .lazy-iframe {
+    z-index: 4;
+}
+
+/* ==========================================================================
    6. SECCIONES DE ANIMACIÓN 3D & MODELADO 3D
    ========================================================================== */
 
@@ -551,7 +719,7 @@ body {
         align-items: center;
     }
     .hero-left-column { text-align: center; }
-    .category-buttons { max-width: 500px; margin: 0 auto; width: 100%; }
+    .category-buttons, .filter-buttons { max-width: 500px; margin: 0 auto; width: 100%; }
     .hero-pipeline-sidebar { max-width: 500px; margin: 0 auto; width: 100%; height: auto; }
     .social-contact-bar { 
         grid-column: auto; 
@@ -572,10 +740,26 @@ body {
         grid-column: auto;
         grid-row: auto;
     }
+
+    /* Tarjeta horizontal colapsa a vertical en tablet */
+    .project-card-horizontal {
+        flex-direction: column !important;
+    }
+    .horizontal-video-side {
+        flex: none;
+        width: 100%;
+        max-width: 400px;
+        margin: 0 auto;
+    }
 }
 
 @media (max-width: 600px) {
     .artist-name { font-size: 3.2rem; }
-    .category-buttons { grid-template-columns: 1fr; }
+    .category-buttons, .filter-buttons { grid-template-columns: 1fr; }
     .illustrations-grid-2 { grid-template-columns: 1fr; }
+
+    /* En mobile chico el video vertical ocupa todo el ancho */
+    .horizontal-video-side {
+        max-width: 100%;
+    }
 }
